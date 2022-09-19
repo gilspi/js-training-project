@@ -1,0 +1,22 @@
+{
+  "name": "food",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gilspi/js-training-project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gilspi/js-training-project/issues"
+  },
+  "homepage": "https://github.com/gilspi/js-training-project#readme",
+  "devDependencies": {
+    "json-server": "^0.4.2"
+  }
+}

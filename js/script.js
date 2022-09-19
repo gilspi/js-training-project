@@ -239,7 +239,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
             fetch('./server.php', {
                 method: 'POST',
-                 
+                headers: {
+                    'Content-type': 'application/json'
+                },
                 body: JSON.stringify(object)
             }).then(data => {
                 data.text();
@@ -278,4 +280,8 @@ window.addEventListener("DOMContentLoaded", () => {
             closeModal();
         }, 4000);
     }
+
+    fetch('http://localhost:3000/menus')
+    .then(data => data.json())
+    .then(res => console.log(res));
 });
