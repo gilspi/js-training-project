@@ -1,8 +1,8 @@
 window.addEventListener("DOMContentLoaded", () => {
     // Tabs
     const tabs = document.querySelectorAll('.tabheader__item'),
-          tabsContent = document.querySelectorAll('.tabcontent'),
-          tabsParent = document.querySelector('.tabheader__items');
+        tabsContent = document.querySelectorAll('.tabcontent'),
+        tabsParent = document.querySelector('.tabheader__items');
 
     function hideTabContent() {
         tabsContent.forEach(item => {
@@ -26,7 +26,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     tabsParent.addEventListener('click', (event) => {
         const target = event.target;
-        
+
         if (target && target.classList.contains('tabheader__item')) {
             tabs.forEach((item, i) => {
                 if (target == item) {
@@ -43,13 +43,16 @@ window.addEventListener("DOMContentLoaded", () => {
         let days, hours, minutes, seconds;
         const t = Date.parse(endtime) - Date.parse(new Date());
 
-        if (t <= 0 ) {
-            days = 0; hours = 0; minutes = 0; seconds = 0;
+        if (t <= 0) {
+            days = 0;
+            hours = 0;
+            minutes = 0;
+            seconds = 0;
         } else {
-              days = Math.floor(t / (1000 * 60 * 60 * 24)),
-              hours = Math.floor((t / (1000 * 60 * 60)) % 24),
-              minutes = Math.floor((t / (1000 * 60)) %  60),
-              seconds = Math.floor((t / 1000) % 60);
+            days = Math.floor(t / (1000 * 60 * 60 * 24)),
+                hours = Math.floor((t / (1000 * 60 * 60)) % 24),
+                minutes = Math.floor((t / (1000 * 60)) % 60),
+                seconds = Math.floor((t / 1000) % 60);
         }
 
         return {
@@ -71,12 +74,12 @@ window.addEventListener("DOMContentLoaded", () => {
 
     function setClock(selector, endtime) {
         const timer = document.querySelector(selector),
-              days = timer.querySelector('#days'),
-              hours = timer.querySelector('#hours'),
-              minutes = timer.querySelector('#minutes'),
-              seconds = timer.querySelector('#seconds'),
-              timeInterval = setInterval(updateClock, 1000);
-        
+            days = timer.querySelector('#days'),
+            hours = timer.querySelector('#hours'),
+            minutes = timer.querySelector('#minutes'),
+            seconds = timer.querySelector('#seconds'),
+            timeInterval = setInterval(updateClock, 1000);
+
         updateClock();
 
         function updateClock() {
@@ -86,7 +89,7 @@ window.addEventListener("DOMContentLoaded", () => {
             hours.innerHTML = getZero(t.hours);
             minutes.innerHTML = getZero(t.minutes);
             seconds.innerHTML = getZero(t.seconds);
-            
+
             if (t.total <= 0) {
                 clearInterval(timeInterval);
             }
@@ -97,8 +100,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // Modal window
     const modalTriggers = document.querySelectorAll('[data-modal]'),
-          modal = document.querySelector('.modal'),
-          modalCloseBtn = document.querySelector('[data-close]');
+        modal = document.querySelector('.modal');
 
     function openModal() {
         modal.classList.add('show');
@@ -106,8 +108,8 @@ window.addEventListener("DOMContentLoaded", () => {
         document.body.style.overflow = 'hidden';
         clearInterval(modalTimeId);
     }
-    
-    modalTriggers.forEach( modalTrigger => {
+
+    modalTriggers.forEach(modalTrigger => {
         modalTrigger.addEventListener('click', openModal);
     });
 
@@ -117,10 +119,10 @@ window.addEventListener("DOMContentLoaded", () => {
         document.body.style.overflow = '';
     }
 
-    modalCloseBtn.addEventListener('click', closeModal);
 
     modal.addEventListener('click', (e) => {
-        if (e.target == modal) {
+        if (e.target == modal || e.target.getAttribute('data-close') == '') {
+            console.log(e.target.getAttribute('data-close'));
             closeModal();
         }
     });
@@ -131,7 +133,7 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    const modalTimeId = setTimeout(openModal, 3000);
+    const modalTimeId = setTimeout(openModal, 50000);
 
     function showModalByScroll() {
         if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight - 1) {
@@ -144,7 +146,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // Use classes for cards
     class MenuCard {
-         constructor(src, alt, title, descr, price, parentSelector) {
+        constructor(src, alt, title, descr, price, parentSelector) {
             this.src = src;
             this.alt = alt;
             this.title = title;
@@ -153,13 +155,13 @@ window.addEventListener("DOMContentLoaded", () => {
             this.transfer = 3;
             this.changeToBYN();
             this.parent = document.querySelector(parentSelector);
-         }
+        }
 
-         changeToBYN() {
+        changeToBYN() {
             this.price *= this.transfer;
-         }
+        }
 
-         render() {
+        render() {
             const element = document.createElement('div');
             element.innerHTML = `
                 <div class="menu__item">
@@ -175,7 +177,7 @@ window.addEventListener("DOMContentLoaded", () => {
             `;
 
             this.parent.append(element);
-         }
+        }
     }
 
     new MenuCard(
@@ -207,32 +209,35 @@ window.addEventListener("DOMContentLoaded", () => {
     const forms = document.querySelectorAll('form');
 
     const message = {
-        loading: 'Loading',
+        loading: 'img/form/spinner.svg',
         success: 'Thanks! No many times to connect with you!',
         failure: 'No good!'
     };
 
     forms.forEach(item => {
-        postData(item); 
+        postData(item);
     });
 
     function postData(form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            
-            const statusMessage = document.createElement('div');
-            statusMessage.classList.add('status');
-            statusMessage.textContent = message.loading;
-            form.append(statusMessage);
+
+            const statusMessage = document.createElement('img');
+            statusMessage.src = message.loading;
+            statusMessage.style.cssText = `
+                display: block;
+                margin: 0 auto;
+            `;
+            form.insertAdjacentElement('afterend', statusMessage);
 
             const request = new XMLHttpRequest();
             request.open('POST', './server.php');
-            
+
             request.setRequestHeader('Content-type', 'application/json');
             const formData = new FormData(form);
 
             const object = {};
-            formData.forEach(function(value, key) {
+            formData.forEach(function (value, key) {
                 object[key] = value;
             });
 
@@ -243,15 +248,36 @@ window.addEventListener("DOMContentLoaded", () => {
             request.addEventListener('load', () => {
                 if (request.status == 200) {
                     console.log(request.respone);
-                    statusMessage.textContent = message.success;
+                    showThanksModal(message.success);
                     form.reset();
-                    setTimeout(() => {
-                        statusMessage.remove();
-                    }, 2000);
+                    statusMessage.remove();
                 } else {
-                    statusMessage.textContent = message.failure;
+                    showThanksModal(message.failure);
                 }
             });
         });
+    }
+
+    function showThanksModal(message) {
+        const modalDialog = document.querySelector('.modal__dialog');
+
+        modalDialog.classList.add('hide');
+        openModal();
+
+        const thanksModal = document.createElement('div');
+        thanksModal.classList.add('modal__dialog');
+        thanksModal.innerHTML = `
+        <div class="modal__content">
+            <div class="modal__close" data-close>&times;</div>
+            <div class="modal__title">${message}</div>
+        </div>
+        `;
+        document.querySelector('.modal').append(thanksModal);
+        setTimeout(() => {
+            thanksModal.remove();
+            modalDialog.classList.add('show');
+            modalDialog.classList.remove('hide');
+            closeModal();
+        }, 4000);
     }
 });
