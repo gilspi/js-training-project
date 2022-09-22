@@ -16,7 +16,8 @@
   },
   "homepage": "https://github.com/gilspi/js-training-project#readme",
   "devDependencies": {
-    "json-server": "^0.4.2"
+    "json-server": "^0.4.2",
+    "webpack-cli": "^4.10.0"
   },
   "description": ""
 }
